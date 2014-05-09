@@ -42,16 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionToken.cs" />
+    <Compile Include="FunctionToken.cs" />
     <Compile Include="PriorityToken.cs" />
-    <Compile Include="FunctionDictionary.cs" />
-    <Compile Include="Node.cs" />
     <Compile Include="NumToken.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Token.cs" />
-    <Compile Include="Tree.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

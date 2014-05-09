@@ -18,6 +18,7 @@ namespace Calculator
 
         public void TryParse(string str)
         {
+            str = str.ToLower();
             foreach (char ch in str)
             {
                 AddToken(ch);
@@ -55,12 +56,15 @@ namespace Calculator
             {
                 AddToken(new PriorityToken(c));
             }
+            else if (FunctionToken.Dictionary.Contains(c))
+            {
+                AddToken(new FunctionToken(c));
+            }
         }
         protected void AddToken(Token token)
         {
             m_Tokens.Add(token);
         }
-
         private void CombineTokens(List<Token> combinedTokens)
         {
             int i = 0;
@@ -82,7 +86,20 @@ namespace Calculator
                         break;
                     }
                 }
-                if (nextToken is ActionToken)
+                if (nextToken is FunctionToken)
+                    combinedTokens.Add(new FunctionToken());
+                while (nextToken is FunctionToken)
+                {
+                    combinedTokens.Last().AddStr(nextToken.GetStr());
+                    try
+                    {
+                        nextToken = m_Tokens[++i];
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        break;
+                    }
+                }                if (nextToken is ActionToken)
                     combinedTokens.Add(new ActionToken());
                 while (nextToken is ActionToken)
                 {
@@ -104,7 +121,6 @@ namespace Calculator
                 }
             }
         }
-
         private Token CreateExpresionTree(List<Token> tokens)
         {
             SetPriorities(tokens);
@@ -121,10 +137,28 @@ namespace Calculator
                         maxInd = index;
                     }
                 }
+
                 Token thisToken = tokens[maxInd];
-                Token nextToken = tokens[maxInd + 1];
-                Token prevToken = tokens[maxInd - 1];
-                thisToken.AddDescendats(new List<Token> { prevToken, nextToken });
+                Token nextToken;
+                try
+                {
+                    nextToken = tokens[maxInd + 1];
+                }
+                catch (Exception)
+                {
+                    nextToken = null;
+                }
+                Token prevToken;
+                try
+                {
+                    prevToken = tokens[maxInd - 1];
+                }
+                catch (Exception)
+                {
+                    prevToken = null;
+                }
+
+                thisToken.AddDescendats(new List<Token> {prevToken, nextToken});
                 tokens.Remove(prevToken);
                 tokens.Remove(nextToken);
                 thisToken.Priority = 0;

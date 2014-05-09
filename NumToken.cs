@@ -9,7 +9,7 @@ namespace Calculator
     class NumToken : Token
     {
         public static string Dictionary = "1234567890.,";
-        public override int Priority { get { return 0; }set{throw new FieldAccessException();} }
+        public override int Priority { get { return 0; } set{throw new FieldAccessException();} }
         public NumToken(char c) : base(c) { }
 
         public NumToken() : base()
